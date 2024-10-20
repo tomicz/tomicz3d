@@ -1,7 +1,7 @@
 #include "../include/logger.hpp"
 
 Logger::Logger(const std::string& filename) {
-    logFile.open(filename, std::ios::app); // Open file in append mode
+    logFile.open(filename, std::ios::out | std::ios::trunc);
 }
 
 Logger::~Logger() {

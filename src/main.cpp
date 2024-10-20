@@ -2,6 +2,8 @@
 #include "../include/logger.hpp"
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <string>
+#include <chrono>
 
 // Vertex Shader source
 const char* vertexShaderSource = R"(
@@ -55,13 +57,6 @@ unsigned int compileShaderProgram() {
     glAttachShader(shaderProgram, fragmentShader);
     glLinkProgram(shaderProgram);
 
-    // Check for linking errors
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-    if (!success) {
-        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-        std::cerr << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-    }
-
     // Clean up shaders as they are no longer needed
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
@@ -75,7 +70,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 }
 
 int main() {
-    Logger logger("engine.log"); // Create logger and log to a file
+    Logger logger("../logs/engine.log"); // Create logger and log to a file
     logger.log(Logger::INFO, "Game engine starting...");
 
     // Initialize GLFW
@@ -135,14 +130,32 @@ int main() {
     unsigned int shaderProgram = compileShaderProgram();
     glUseProgram(shaderProgram);
 
-    // Main render loop
-    while (!glfwWindowShouldClose(window)) {
-        // Clear the screen
-        glClear(GL_COLOR_BUFFER_BIT);
+    // Game loop variables
+    const double TARGET_FPS = 60.0;
+    const double TARGET_FRAME_TIME = 1.0 / TARGET_FPS;
+    double lastFrameTime = glfwGetTime();
+    double deltaTime;
 
-        // Draw the triangle
-        glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+    int tick = 0;
+    while (!glfwWindowShouldClose(window)) {
+        // Calculate delta time
+        double currentFrameTime = glfwGetTime();
+        deltaTime = currentFrameTime - lastFrameTime;
+
+        if (deltaTime >= TARGET_FRAME_TIME) {
+            lastFrameTime = currentFrameTime;
+
+            // Clear the screen
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            // Draw the triangle
+            glBindVertexArray(VAO);
+            glDrawArrays(GL_TRIANGLES, 0, 3);
+
+            // Log tick information
+            logger.log(Logger::INFO, std::to_string(tick));
+            tick++;
+        }
 
         // Swap buffers and poll events
         glfwSwapBuffers(window);
@@ -159,4 +172,3 @@ int main() {
     logger.log(Logger::INFO, "Game engine shutting down...");
     return 0;
 }
-
