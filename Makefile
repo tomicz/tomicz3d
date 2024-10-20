@@ -2,17 +2,21 @@ CC = g++
 CFLAGS = -Wall -std=c++17 -I/opt/homebrew/include
 LDFLAGS = -L/opt/homebrew/lib -framework OpenGL `pkg-config --cflags --libs glew glfw3`
 SOURCES = src/main.cpp
-OBJECTS = $(SOURCES:.cpp=.o)
-EXECUTABLE = game_engine
+OBJECTS = $(SOURCES:src/%.cpp=build/%.o)
+EXECUTABLE = build/game_engine
 
-all: $(EXECUTABLE)
+# Create build directory if it doesn't exist
+build:
+	mkdir -p build
+
+all: build $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(OBJECTS) -o $@ $(LDFLAGS)
 
-%.o: %.cpp
+build/%.o: src/%.cpp | build
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJECTS) $(EXECUTABLE)
+	rm -rf build/*
 
