@@ -1,1 +1,11 @@
+# Ignore build artifacts
+/build/
+
+# Ignore the engine log file
+build/engine.log
+
+# Other ignores...
 *.o
+*.exe
+*.tmp
+
