@@ -1,17 +1,18 @@
 CC = g++
-CFLAGS = -Wall -std=c++17
-LDFLAGS = -framework OpenGL `pkg-config --cflags --libs glfw3 glew`
-SOURCES = main.cpp
+CFLAGS = -Wall -std=c++17 -I/opt/homebrew/include
+LDFLAGS = -L/opt/homebrew/lib -framework OpenGL `pkg-config --cflags --libs glew glfw3`
+SOURCES = src/main.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 EXECUTABLE = game_engine
 
 all: $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
-    $(CC) $(OBJECTS) -o $@ $(LDFLAGS)
+	$(CC) $(OBJECTS) -o $@ $(LDFLAGS)
 
 %.o: %.cpp
-    $(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-    rm -f $(OBJECTS) $(EXECUTABLE)
+	rm -f $(OBJECTS) $(EXECUTABLE)
+
