@@ -1,46 +1,67 @@
-#include "../include/logger.hpp"
 #include <iostream>
-#include <string>
 #include <chrono>
-#include <thread>
+#include <iomanip>
 
-void handleWindowResize(int width, int height) {
-    std::cout << "Window resized to " << width << "x" << height << std::endl;
-}
+class Game {
+public:
+    void Initialize() {
+        std::cout << "Game started." << std::endl;
+    }
 
-int main() {
-    Logger logger("../logs/engine.log");
-    logger.log(Logger::INFO, "Game engine starting...");
+    void try_recursion(){
+        std::cout << "recusrion" << std::endl;
+        try_recursion();
+    }
 
-    const double TARGET_FPS = 60.0;
-    const double TARGET_FRAME_TIME = 1.0 / TARGET_FPS;
-    auto lastFrameTime = std::chrono::high_resolution_clock::now();
+    void ProcessInput() {
+        // Process input here
+    }
 
-    bool running = true;
-    int tick = 0;
+    void Update() {
+        // Update game state here
+    }
 
-    while (running) {
-        auto currentFrameTime = std::chrono::high_resolution_clock::now();
-        double deltaTime = std::chrono::duration<double>(currentFrameTime - lastFrameTime).count();
+    void Render() {
+        // Render frame here
+    }
 
-        if (deltaTime >= TARGET_FRAME_TIME) {
-            lastFrameTime = currentFrameTime;
+    void Run() {
+        Initialize();
+        
+        int frameCount = 0;
+        auto lastFpsUpdate = std::chrono::high_resolution_clock::now();
 
-            std::cout << "\033[2J\033[1;1H";  // ANSI escape codes to clear console and move cursor to top-left
+        while (isRunning) {
+            ProcessInput();
+            Update();
+            Render();
 
-            std::cout << "Frame: " << tick << std::endl;
+            frameCount++;
 
-            logger.log(Logger::INFO, "Tick: " + std::to_string(tick));
-            tick++;
-
-            if (tick >= 600) {
-                running = false;
+            auto now = std::chrono::high_resolution_clock::now();
+            auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(now - lastFpsUpdate);
+            try_recursion();
+            
+            if (elapsed.count() >= 1) {
+                double fps = frameCount / elapsed.count();
+                std::cout << "\rFPS: " << std::fixed << std::setprecision(2) << fps << std::flush;
+                
+                frameCount = 0;
+                lastFpsUpdate = now;
             }
         }
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        std::cout << "\nExiting game loop..." << std::endl;
     }
 
-    logger.log(Logger::INFO, "Game engine shutting down...");
+private:
+    bool isRunning = true;
+};
+
+int main() {
+    Game game;
+    std::cout << "Starting game..." << std::endl;
+    game.Run();
+    std::cout << "Game ended." << std::endl;
     return 0;
 }

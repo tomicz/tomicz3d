@@ -1,28 +1,20 @@
-CC = g++
-CFLAGS = -Wall -std=c++17 -I/opt/homebrew/include -Iinclude
-LDFLAGS = -L/opt/homebrew/lib -framework OpenGL `pkg-config --cflags --libs glew glfw3`
-SOURCES = src/main.cpp src/logger.cpp  # Add logger.cpp here
-OBJECTS = $(SOURCES:src/%.cpp=build/%.o)
-EXECUTABLE = build/game_engine
+CXX := clang++
+CXXFLAGS := -std=c++17 -Wall -Iinclude
+LDFLAGS := -L/opt/homebrew/lib -lglfw
 
-# Build everything, including the executable
-all: $(EXECUTABLE)
+SRC_DIR := src
+BUILD_DIR := build
+TARGET := $(BUILD_DIR)/game_engine
 
-# Create the build directory
-build:
-	mkdir -p build
+SRCS := $(wildcard $(SRC_DIR)/*.cpp)
+OBJS := $(SRCS:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%.o)
 
-# Linking the object files to create the executable
-$(EXECUTABLE): $(OBJECTS)
-	@echo "Linking the executable..."
-	$(CC) $(OBJECTS) -o $@ $(LDFLAGS)
+$(TARGET): $(OBJS)
+	$(CXX) $(OBJS) -o $@ $(LDFLAGS)
 
-# Compile source files into object files
-build/%.o: src/%.cpp | build
-	@echo "Compiling $< into $@"
-	$(CC) $(CFLAGS) -c $< -o $@
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
+	@mkdir -p $(@D)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Clean the build directory
 clean:
-	rm -rf build/*
-
+	rm -rf $(BUILD_DIR)

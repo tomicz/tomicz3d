@@ -4,8 +4,16 @@
 # Ignore the engine log file
 build/engine.log
 
+# Ignore build/game_engine directory
+build/game_engine/
+
+# Remove executable from build/ folder
+build/*
+!build/.gitkeep
+
 # Other ignores...
 *.o
 *.exe
 *.tmp
+
 
