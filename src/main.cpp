@@ -1,16 +1,12 @@
 #include <iostream>
 #include <chrono>
 #include <iomanip>
+#include "../include/graphics/graphics_api.hpp"
 
 class Game {
 public:
     void Initialize() {
         std::cout << "Game started." << std::endl;
-    }
-
-    void try_recursion(){
-        std::cout << "recusrion" << std::endl;
-        try_recursion();
     }
 
     void ProcessInput() {
@@ -30,6 +26,7 @@ public:
         
         int frameCount = 0;
         auto lastFpsUpdate = std::chrono::high_resolution_clock::now();
+        exampleOpenGLCode();
 
         while (isRunning) {
             ProcessInput();
@@ -38,9 +35,9 @@ public:
 
             frameCount++;
 
+
             auto now = std::chrono::high_resolution_clock::now();
             auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(now - lastFpsUpdate);
-            try_recursion();
             
             if (elapsed.count() >= 1) {
                 double fps = frameCount / elapsed.count();
