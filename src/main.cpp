@@ -1,7 +1,6 @@
 #include <iostream>
 #include <chrono>
 #include <iomanip>
-#include "../include/graphics/graphics_api.hpp"
 
 class Game {
 public:
@@ -26,7 +25,6 @@ public:
         
         int frameCount = 0;
         auto lastFpsUpdate = std::chrono::high_resolution_clock::now();
-        exampleOpenGLCode();
 
         while (isRunning) {
             ProcessInput();
