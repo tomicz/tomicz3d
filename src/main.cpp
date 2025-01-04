@@ -29,7 +29,7 @@ int main() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-    window = glfwCreateWindow(mode->width, mode->height, "tomicz3d", NULL, NULL);
+    window = glfwCreateWindow(mode->width, mode->height, "tomicz3d - Game Engine", NULL, NULL);
     if (!window) {
         glfwTerminate();
         return -1;
