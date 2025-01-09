@@ -5,7 +5,6 @@
 
 GLuint VAO, VBO, shader;
 
-// Vertext shader
 static const char* v_shader = "             \n\
 #version 410                                            \n\
 layout (location = 0) in vec3 pos; \n\
@@ -118,7 +117,7 @@ int main() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow* window = glfwCreateWindow(800, 600, "tomiczrd", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(800, 600, "tomicz3d", NULL, NULL);
 
     if(window == NULL){
         std::cout << "Failed to create GLFW Window" << std::endl;
@@ -128,7 +127,6 @@ int main() {
 
     glfwMakeContextCurrent(window);
 
-    // Initialize GLEW
     if (glewInit() != GLEW_OK) {
         std::cout << "GLEW initialization failed!" << std::endl;
         glfwDestroyWindow(window);
@@ -145,18 +143,14 @@ int main() {
     compile_shaders();
     
     while(!glfwWindowShouldClose(window)){
-        // Clear the buffer
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-
         glfwPollEvents();
         glUseProgram(shader);
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
         glBindVertexArray(0);
         glUseProgram(0);
-
-        // Swap the buffers
         glfwSwapBuffers(window);
     }
 
